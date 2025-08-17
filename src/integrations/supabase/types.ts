@@ -14,6 +14,86 @@ export type Database = {
   }
   public: {
     Tables: {
+      agent_conversations: {
+        Row: {
+          agent_id: string
+          contact_id: string
+          created_at: string
+          id: string
+          last_message: string | null
+          message_count: number
+          platform: string
+          updated_at: string
+        }
+        Insert: {
+          agent_id: string
+          contact_id: string
+          created_at?: string
+          id?: string
+          last_message?: string | null
+          message_count?: number
+          platform: string
+          updated_at?: string
+        }
+        Update: {
+          agent_id?: string
+          contact_id?: string
+          created_at?: string
+          id?: string
+          last_message?: string | null
+          message_count?: number
+          platform?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_conversations_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agents: {
+        Row: {
+          calendar_connected: boolean
+          configuration: Json | null
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          status: string
+          updated_at: string
+          user_id: string
+          whatsapp_connected: boolean
+        }
+        Insert: {
+          calendar_connected?: boolean
+          configuration?: Json | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          status?: string
+          updated_at?: string
+          user_id: string
+          whatsapp_connected?: boolean
+        }
+        Update: {
+          calendar_connected?: boolean
+          configuration?: Json | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+          whatsapp_connected?: boolean
+        }
+        Relationships: []
+      }
       ai_prompts: {
         Row: {
           ai_prompt: string | null
@@ -31,6 +111,47 @@ export type Database = {
           id?: number
         }
         Relationships: []
+      }
+      calendar_connections: {
+        Row: {
+          access_token: string | null
+          agent_id: string
+          calendar_id: string
+          created_at: string
+          id: string
+          refresh_token: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          access_token?: string | null
+          agent_id: string
+          calendar_id: string
+          created_at?: string
+          id?: string
+          refresh_token?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          access_token?: string | null
+          agent_id?: string
+          calendar_id?: string
+          created_at?: string
+          id?: string
+          refresh_token?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "calendar_connections_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       form_response: {
         Row: {
@@ -154,6 +275,47 @@ export type Database = {
           tom?: string | null
         }
         Relationships: []
+      }
+      whatsapp_connections: {
+        Row: {
+          agent_id: string
+          api_key: string | null
+          created_at: string
+          id: string
+          phone_number: string
+          status: string
+          updated_at: string
+          webhook_url: string | null
+        }
+        Insert: {
+          agent_id: string
+          api_key?: string | null
+          created_at?: string
+          id?: string
+          phone_number: string
+          status?: string
+          updated_at?: string
+          webhook_url?: string | null
+        }
+        Update: {
+          agent_id?: string
+          api_key?: string | null
+          created_at?: string
+          id?: string
+          phone_number?: string
+          status?: string
+          updated_at?: string
+          webhook_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "whatsapp_connections_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
