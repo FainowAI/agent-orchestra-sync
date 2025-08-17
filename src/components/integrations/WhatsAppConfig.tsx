@@ -45,17 +45,27 @@ const WhatsAppConfig = ({ agentId, connection, onConnectionUpdate }: WhatsAppCon
 
       if (error) throw error;
 
-      toast({
-        title: "Instância Criada",
-        description: "WhatsApp conectado com sucesso! Escaneie o QR Code no seu dispositivo.",
-      });
-
-      onConnectionUpdate();
+      if (data?.success) {
+        toast({
+          title: "Instância Criada",
+          description: "WhatsApp instância criada! Escaneie o QR Code para conectar.",
+        });
+        
+        // Display QR code if available
+        if (data.qrcode || data.qr) {
+          console.log('QR Code available for scanning');
+          // The QR code will be handled by the Evolution API interface
+        }
+        
+        onConnectionUpdate();
+      } else {
+        throw new Error(data?.error || 'Falha ao criar instância');
+      }
     } catch (error: any) {
       console.error('Error creating WhatsApp instance:', error);
       toast({
         title: "Erro ao criar instância",
-        description: error.message || "Falha ao conectar com Evolution API",
+        description: error.message || "Falha ao conectar com Evolution API. Verifique se o campo 'integration' está correto.",
         variant: "destructive",
       });
     } finally {

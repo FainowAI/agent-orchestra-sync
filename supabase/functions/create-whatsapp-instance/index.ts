@@ -34,6 +34,7 @@ serve(async (req) => {
     const instanceName = `agent-${agentId}`;
     const webhookUrl = `${SUPABASE_URL}/functions/v1/whatsapp-webhook`;
 
+    // Create instance with correct payload for Evolution API v2 self-hosted
     const evolutionResponse = await fetch(`${EVOLUTION_BASE_URL}/instance/create`, {
       method: 'POST',
       headers: {
@@ -42,20 +43,8 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         instanceName,
-        token: EVOLUTION_API_KEY,
         qrcode: true,
-        number: phoneNumber,
-        webhook: webhookUrl,
-        webhook_by_events: false,
-        webhook_base64: false,
-        events: [
-          'APPLICATION_STARTUP',
-          'QRCODE_UPDATED',
-          'CONNECTION_UPDATE',
-          'MESSAGES_UPSERT',
-          'MESSAGES_UPDATE',
-          'SEND_MESSAGE'
-        ]
+        integration: "WHATSAPP-BAILEYS"
       }),
     });
 
@@ -68,6 +57,40 @@ serve(async (req) => {
     const evolutionData = await evolutionResponse.json();
     console.log('Evolution API response:', evolutionData);
 
+    // Configure webhook separately after instance creation
+    if (evolutionData.instance) {
+      try {
+        const webhookResponse = await fetch(`${EVOLUTION_BASE_URL}/webhook/set/${instanceName}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': EVOLUTION_API_KEY,
+          },
+          body: JSON.stringify({
+            url: webhookUrl,
+            webhook_by_events: false,
+            webhook_base64: false,
+            events: [
+              'APPLICATION_STARTUP',
+              'QRCODE_UPDATED', 
+              'CONNECTION_UPDATE',
+              'MESSAGES_UPSERT',
+              'MESSAGES_UPDATE',
+              'SEND_MESSAGE'
+            ]
+          }),
+        });
+        
+        if (webhookResponse.ok) {
+          console.log('Webhook configured successfully');
+        } else {
+          console.warn('Failed to configure webhook:', await webhookResponse.text());
+        }
+      } catch (webhookError) {
+        console.warn('Webhook configuration error:', webhookError);
+      }
+    }
+
     // Save connection to database
     const { data: connection, error: dbError } = await supabase
       .from('whatsapp_connections')
@@ -76,7 +99,7 @@ serve(async (req) => {
         phone_number: phoneNumber,
         webhook_url: webhookUrl,
         api_key: EVOLUTION_API_KEY,
-        status: 'connected'
+        status: 'connecting'
       })
       .select()
       .single();
@@ -86,12 +109,12 @@ serve(async (req) => {
       throw new Error(`Database error: ${dbError.message}`);
     }
 
-    // Update agent status
+    // Update agent status (will be updated to active when connection is established)
     await supabase
       .from('agents')
       .update({ 
-        whatsapp_connected: true,
-        status: 'active'
+        whatsapp_connected: false, // Will be updated by webhook when connected
+        status: 'inactive'
       })
       .eq('id', agentId);
 
@@ -100,8 +123,9 @@ serve(async (req) => {
     return new Response(JSON.stringify({ 
       success: true, 
       connection,
-      qrcode: evolutionData.qrcode,
-      instanceName 
+      qrcode: evolutionData.qrcode || evolutionData.qr,
+      instanceName,
+      instance: evolutionData.instance
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
