@@ -1,1 +1,19 @@
 project_id = "viihcrzhrscuujqiwdwm"
+
+[functions.create-whatsapp-instance]
+verify_jwt = true
+
+[functions.connect-google-calendar]  
+verify_jwt = true
+
+[functions.test-openai-model]
+verify_jwt = true
+
+[functions.test-whatsapp-connection]
+verify_jwt = true
+
+[functions.test-calendar-connection]
+verify_jwt = true
+
+[functions.whatsapp-webhook]
+verify_jwt = false

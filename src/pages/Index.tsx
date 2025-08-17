@@ -6,6 +6,7 @@ import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import DashboardStats from '@/components/dashboard/DashboardStats';
 import AgentCard from '@/components/dashboard/AgentCard';
 import CreateAgentDialog from '@/components/dashboard/CreateAgentDialog';
+import IntegrationsDialog from '@/components/integrations/IntegrationsDialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plus, Bot } from 'lucide-react';
@@ -24,6 +25,8 @@ const Index = () => {
   const [agents, setAgents] = useState<Agent[]>([]);
   const [loading, setLoading] = useState(true);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [integrationsDialogOpen, setIntegrationsDialogOpen] = useState(false);
+  const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
   const { user } = useAuth();
   const { toast } = useToast();
 
@@ -88,9 +91,14 @@ const Index = () => {
   const handleEditAgent = (agent: Agent) => {
     // TODO: Implement edit functionality
     toast({
-      title: "Edit Agent",
-      description: "Agent editing coming soon!",
+      title: "Editar Agente",
+      description: "Edição de agentes em breve!",
     });
+  };
+
+  const handleConfigureAgent = (agent: Agent) => {
+    setSelectedAgent(agent);
+    setIntegrationsDialogOpen(true);
   };
 
   useEffect(() => {
@@ -158,6 +166,7 @@ const Index = () => {
                   key={agent.id}
                   agent={agent}
                   onEdit={handleEditAgent}
+                  onConfigure={handleConfigureAgent}
                   onToggleStatus={handleToggleStatus}
                 />
               ))}
@@ -170,6 +179,12 @@ const Index = () => {
         open={createDialogOpen}
         onOpenChange={setCreateDialogOpen}
         onAgentCreated={fetchAgents}
+      />
+
+      <IntegrationsDialog
+        open={integrationsDialogOpen}
+        onOpenChange={setIntegrationsDialogOpen}
+        agent={selectedAgent}
       />
     </div>
   );

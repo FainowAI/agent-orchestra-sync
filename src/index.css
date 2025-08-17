@@ -50,6 +50,10 @@ All colors MUST be HSL.
     --warning: 38 92% 50%;
     --warning-foreground: 222 47% 4%;
 
+    /* Info colors */
+    --info: 217 91% 60%;
+    --info-foreground: 222 47% 4%;
+
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(258 90% 66%));
     --gradient-card: linear-gradient(135deg, hsl(225 25% 8%), hsl(225 25% 10%));

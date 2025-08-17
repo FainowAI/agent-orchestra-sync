@@ -17,10 +17,11 @@ interface AgentCardProps {
   agent: Agent;
   conversationCount?: number;
   onEdit: (agent: Agent) => void;
+  onConfigure: (agent: Agent) => void;
   onToggleStatus: (agentId: string, currentStatus: string) => void;
 }
 
-const AgentCard = ({ agent, conversationCount = 0, onEdit, onToggleStatus }: AgentCardProps) => {
+const AgentCard = ({ agent, conversationCount = 0, onEdit, onConfigure, onToggleStatus }: AgentCardProps) => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active': return 'success';
@@ -53,14 +54,16 @@ const AgentCard = ({ agent, conversationCount = 0, onEdit, onToggleStatus }: Age
               </p>
             )}
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => onEdit(agent)}
-            className="opacity-0 group-hover:opacity-100 transition-opacity"
-          >
-            <Settings className="w-4 h-4" />
-          </Button>
+          <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => onConfigure(agent)}
+              className="h-8 w-8"
+            >
+              <Settings className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
         
         <div className="flex items-center justify-between mt-4">
@@ -87,22 +90,32 @@ const AgentCard = ({ agent, conversationCount = 0, onEdit, onToggleStatus }: Age
           <div className="flex items-center space-x-4 text-sm text-muted-foreground">
             <div className="flex items-center space-x-1">
               <Users className="w-3 h-3" />
-              <span>{conversationCount} conversations</span>
+              <span>{conversationCount} conversas</span>
             </div>
             <div className="flex items-center space-x-1">
               <Activity className="w-3 h-3" />
-              <span>Created {new Date(agent.created_at).toLocaleDateString()}</span>
+              <span>Criado {new Date(agent.created_at).toLocaleDateString('pt-BR')}</span>
             </div>
           </div>
           
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onToggleStatus(agent.id, agent.status)}
-            className={agent.status === 'active' ? 'border-destructive text-destructive hover:bg-destructive/10' : 'border-success text-success hover:bg-success/10'}
-          >
-            {agent.status === 'active' ? 'Deactivate' : 'Activate'}
-          </Button>
+          <div className="flex space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onConfigure(agent)}
+              className="text-xs"
+            >
+              Configurar
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onToggleStatus(agent.id, agent.status)}
+              className={agent.status === 'active' ? 'border-destructive text-destructive hover:bg-destructive/10' : 'border-success text-success hover:bg-success/10'}
+            >
+              {agent.status === 'active' ? 'Desativar' : 'Ativar'}
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>
