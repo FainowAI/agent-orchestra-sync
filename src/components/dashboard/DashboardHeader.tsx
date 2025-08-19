@@ -33,7 +33,7 @@ const DashboardHeader = ({ onCreateAgent }: DashboardHeaderProps) => {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-gradient-primary rounded-lg shadow-glow" />
+            <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg shadow-glow" />
             <div>
               <h1 className="text-2xl font-bold text-foreground">AgentSync</h1>
               <p className="text-sm text-muted-foreground">AI Agent Orchestration Platform</p>
@@ -43,14 +43,14 @@ const DashboardHeader = ({ onCreateAgent }: DashboardHeaderProps) => {
           <div className="flex items-center space-x-4">
             <Button 
               onClick={onCreateAgent}
-              className="bg-gradient-primary hover:shadow-glow transition-all duration-300"
+              className="bg-gradient-to-r from-primary to-secondary hover:shadow-glow transition-all duration-300 text-white"
             >
               <Plus className="w-4 h-4 mr-2" />
               Create Agent
             </Button>
             
             <div className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-muted/50">
-              <div className="w-8 h-8 rounded-full bg-gradient-primary flex items-center justify-center text-xs font-medium text-primary-foreground">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-xs font-medium text-white">
                 {user?.email?.[0]?.toUpperCase()}
               </div>
               <span className="text-sm text-foreground">{user?.email}</span>

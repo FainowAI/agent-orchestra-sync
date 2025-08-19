@@ -113,7 +113,7 @@ const Index = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="w-8 h-8 bg-gradient-primary rounded-lg animate-pulse shadow-glow" />
+        <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg animate-pulse shadow-glow" />
       </div>
     );
   }
@@ -139,9 +139,9 @@ const Index = () => {
           </div>
 
           {agents.length === 0 ? (
-            <Card className="bg-gradient-card border-border shadow-card">
+            <Card className="bg-card/50 backdrop-blur-sm border-border shadow-card">
               <CardHeader className="text-center space-y-4">
-                <div className="w-16 h-16 bg-gradient-primary rounded-xl flex items-center justify-center mx-auto shadow-glow">
+                <div className="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center mx-auto shadow-glow">
                   <Bot className="w-8 h-8 text-primary-foreground" />
                 </div>
                 <CardTitle className="text-xl text-foreground">No Agents Yet</CardTitle>
@@ -152,7 +152,7 @@ const Index = () => {
               <CardContent className="text-center">
                 <Button 
                   onClick={() => setCreateDialogOpen(true)}
-                  className="bg-gradient-primary hover:shadow-glow transition-all duration-300"
+                  className="bg-gradient-to-r from-primary to-secondary hover:shadow-glow transition-all duration-300 text-white"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Create Your First Agent

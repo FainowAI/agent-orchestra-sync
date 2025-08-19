@@ -41,7 +41,7 @@ const AgentCard = ({ agent, conversationCount = 0, onEdit, onConfigure, onToggle
   };
 
   return (
-    <Card className="bg-gradient-card border-border shadow-card hover:shadow-elevated transition-all duration-300 group">
+    <Card className="bg-card/50 backdrop-blur-sm border-border shadow-card hover:shadow-elevated transition-all duration-300 group">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex-1">
