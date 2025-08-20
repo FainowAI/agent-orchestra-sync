@@ -16,6 +16,11 @@ serve(async (req) => {
   try {
     const { agentId, phoneNumber } = await req.json();
     
+    // Validate input parameters
+    if (!agentId || !phoneNumber) {
+      throw new Error('agentId and phoneNumber are required');
+    }
+    
     console.log('Creating WhatsApp instance for agent:', agentId, 'phone:', phoneNumber);
 
     const EVOLUTION_BASE_URL = Deno.env.get('EVOLUTION_BASE_URL');
@@ -51,7 +56,7 @@ serve(async (req) => {
     if (!evolutionResponse.ok) {
       const errorText = await evolutionResponse.text();
       console.error('Evolution API error:', errorText);
-      throw new Error(`Evolution API error: ${evolutionResponse.status}`);
+      throw new Error(`Evolution API error: ${evolutionResponse.status} - ${errorText}`);
     }
 
     const evolutionData = await evolutionResponse.json();
@@ -99,7 +104,7 @@ serve(async (req) => {
         phone_number: phoneNumber,
         webhook_url: webhookUrl,
         api_key: EVOLUTION_API_KEY,
-        status: 'connecting'
+        status: 'disconnected'
       })
       .select()
       .single();
