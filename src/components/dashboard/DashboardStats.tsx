@@ -45,7 +45,7 @@ const DashboardStats = ({ totalAgents, activeAgents, totalConversations, connect
       {stats.map((stat, index) => {
         const Icon = stat.icon;
         return (
-          <Card key={index} className="bg-gradient-card border-border shadow-card hover:shadow-elevated transition-all duration-300">
+          <Card key={index} className="bg-card/50 backdrop-blur-sm border-border shadow-card hover:shadow-elevated transition-all duration-300">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 {stat.title}
